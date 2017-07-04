@@ -20,23 +20,19 @@ class Model(SigmoidClassifier):
         self.layers = []
 
         for i in range(self._depth):
-            net = tf.concat(
-                [
-                    net,
-                    tf.layers.dense(net, self._growth_rate, activation=self._activation),
-                ],
-                axis=1
-            )
-            self.layers.append(net)
+            layer = tf.layers.dense(net, self._growth_rate, activation=self._activation)
+            net = tf.concat([net, layer],  axis=1)
+
+            self.layers.append(layer)
 
         net = tf.layers.dense(net, 1)
+        self.layers.append(net)
 
         return net
 
     def get_predictions(self, *args, **kwargs):
 
         predictions = super(Model, self).get_predictions(*args, **kwargs)
-        self.layers.append(predictions)
         return predictions
 
     def get_loss(self, *args, **kwargs):
