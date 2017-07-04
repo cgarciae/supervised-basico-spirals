@@ -9,14 +9,24 @@ class Model(SigmoidClassifier):
         self._activation = kwargs.pop("activation", None)
         self._weight_decay = kwargs.pop("weight_decay", 1E-4)
 
+        self._growth_rate = kwargs.pop("growth_rate", 4)
+        self._depth = kwargs.pop("depth", 5)
+
         super(Model, self).__init__(*args, **kwargs)
 
     def get_logits(self, inputs):
 
         net = inputs.features
 
-        net = tf.layers.dense(net, 16, activation=self._activation)
-        net = tf.layers.dense(net, 8, activation=self._activation)
+        for i in range(self._depth):
+            net = tf.concat(
+                [
+                    net,
+                    tf.layers.dense(net, 4, activation=self._activation),
+                ],
+                axis=1
+            )
+        
         net = tf.layers.dense(net, 1)
 
         return net
