@@ -22,11 +22,11 @@ class Model(SigmoidClassifier):
             net = tf.concat(
                 [
                     net,
-                    tf.layers.dense(net, 4, activation=self._activation),
+                    tf.layers.dense(net, self._growth_rate, activation=self._activation),
                 ],
                 axis=1
             )
-        
+
         net = tf.layers.dense(net, 1)
 
         return net
