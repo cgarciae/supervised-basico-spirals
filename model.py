@@ -15,8 +15,9 @@ class Model(SigmoidClassifier):
         self.layers = []
         net = inputs.features
 
+        net = tf.layers.dense(net, 32, activation=self._activation); self.layers.append(net)
+        net = tf.layers.dense(net, 32, activation=self._activation); self.layers.append(net)
         net = tf.layers.dense(net, 16, activation=self._activation); self.layers.append(net)
-        net = tf.layers.dense(net, 8, activation=self._activation); self.layers.append(net)
         net = tf.layers.dense(net, 1); self.layers.append(net)
 
 
