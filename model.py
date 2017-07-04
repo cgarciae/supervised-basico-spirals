@@ -17,6 +17,7 @@ class Model(SigmoidClassifier):
     def get_logits(self, inputs):
 
         net = inputs.features
+        self.layers = []
 
         for i in range(self._depth):
             net = tf.concat(
@@ -26,10 +27,17 @@ class Model(SigmoidClassifier):
                 ],
                 axis=1
             )
+            self.layers.append(net)
 
         net = tf.layers.dense(net, 1)
 
         return net
+
+    def get_predictions(self, *args, **kwargs):
+
+        predictions = super(Model, self).get_predictions(*args, **kwargs)
+        self.layers.append(predictions)
+        return predictions
 
     def get_loss(self, *args, **kwargs):
 
